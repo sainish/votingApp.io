@@ -25,31 +25,19 @@ var app = new Vue({
         parentMessage: 'Parent',
         error: "Select food and click vote button to make difference.",
         items: [],
-        selectedFood: [],
+        selectedFood: false,
         isSuccess: false,
         hasError: false,
-        googleChartData: [['Task', 'Hours per Day'],
-            ['Work', 8],
-            ['Eat', 2],
-            ['TV', 4],
-            ['Gym', 2],
-            ['Sleep', 8]]
+        googleChartData: [['Fruits', 'Users'],
+           ]
     },
     mounted() {
-        const vm = this;
 
+        this.fetchFoodList();
         google.charts.load('current', {'packages': ['corechart']});
-        google.charts.setOnLoadCallback(vm.drawChart);
+        google.charts.setOnLoadCallback(this.drawChart);
 
-        axios.get(config.routes.getFoodList)
-                .then(function (response) {
-                    vm.items = response.data;
-                    console.log(vm.items);
-                })
-                .catch(function (error) {
-                    // Wu oh! Something went wrong
-                    console.log(error.message);
-                });
+
     },
 
     methods: {
@@ -58,16 +46,37 @@ var app = new Vue({
                     this.googleChartData
                     );
             // Optional; add a title and set the width and height of the chart
-            var options = {'title': 'My Average Day', 'width': '100%', 'height': '100%'};
+            var options = {'title': 'Students Voting', 'width': '100%', 'height': '100%'};
 
             // Display the chart inside the <div> element with id="piechart"
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
             chart.draw(data, options);
         },
+        fetchFoodList: function (e) {
+            const vm = this;
+            axios.get(config.routes.getFoodList)
+                    .then(function (response) {
+                        vm.items = response.data;
+                        var index;
+                        for (index = 0; index < response.data.length; ++index) {
+                            vm.googleChartData.push([response.data[index]['name'],response.data[index]['percent']]);
+                        }
+                        
+                    })
+                    .catch(function (error) {
+                        // Wu oh! Something went wrong
+                        console.log(error.message);
+                    });
+        },
         addVote: function (event) {
-            // `this` inside methods points to the Vue instance
-            // `event` is the native DOM event
             const this_vm = this;
+            this_vm.fetchFoodList()
+            if (this_vm.selectedFood === false) {
+                this_vm.isSuccess = false;
+                this_vm.hasError = true;
+                this_vm.error = "Please select any one option.";
+                return;
+            }
             axios.post(config.routes.giveVote, {
                 selectedFood: this_vm.selectedFood,
             }).then(function (response) {
@@ -78,9 +87,8 @@ var app = new Vue({
                 } else {
                     this_vm.hasError = true;
                     this_vm.isSuccess = false;
-                    this_vm.error = "I know " + response.data[0].name + " is awesome. But you can vote only once :)";
+                    this_vm.error = "You already voted for " + response.data[0].name + ".";
                 }
-                console.log(response);
             })
                     .catch(function (error) {
                         console.log(error);
@@ -89,12 +97,3 @@ var app = new Vue({
         }
     }
 });
-
-
-
-// Draw the chart and set the chart values
-function drawChart() {
-
-
-
-}
