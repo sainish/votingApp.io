@@ -20,12 +20,15 @@
     -o-background-size: cover;
     background-size: cover;
 }
-html { 
-    background: url({{URL::asset('background.jpg')}}) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+
+.links > a,.nav-link {
+    color: #0a0a0a;
+    padding: 0 25px;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
 }
     </style>
 </head>

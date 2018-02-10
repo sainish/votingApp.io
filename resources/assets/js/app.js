@@ -4,12 +4,10 @@ var axios = require('axios');
 window.Vue = require('vue');
 
 //Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
 var app = new Vue({
     el: '#app',
     data: {
-        message: 'Hello Vue.js!',
-        parentMessage: 'Parent',
+        message: 'Hello Student!',
         error: "Select food and click vote button to make difference.",
         items: [],
         selectedFood: false,
