@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use \App\VotingResult;
 use DB;
+use URL;
 
 class HomeController extends Controller {
 
@@ -24,31 +25,29 @@ class HomeController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $mostInvest = \App\Item::all()->toArray();
-//        print_r($mostInvest);
-        return view('home')->with('data', $mostInvest);
+        return view('home');
     }
 
     public function getFoodList() {
-        
-        
+
+        $totalVotes = 0;
         $foodList = \App\Item::all()->toArray();
         $VoteList = VotingResult::all()->toArray();
         $VoteList = DB::table('voting_results')
-                     ->select(DB::raw('count(*) as item_count, item_id'))
-                     ->groupBy('item_id')
-                     ->get()->keyBy('item_id')->toArray();
-        $totalVotes = 0;
+                        ->select(DB::raw('count(*) as item_count, item_id'))
+                        ->groupBy('item_id')
+                        ->get()->keyBy('item_id')->toArray();
         foreach ($VoteList as $key => $value) {
             $totalVotes += $value->item_count;
         }
         foreach ($foodList as $key => $foodItem) {
-            if (array_key_exists($foodItem['id'],$VoteList))
-                $foodList[$key]['percent'] = round(($VoteList[$foodItem['id']]->item_count*100)/$totalVotes,2);
-            else
+            if (array_key_exists($foodItem['id'], $VoteList)) {
+                $foodList[$key]['percent'] = round(($VoteList[$foodItem['id']]->item_count * 100) / $totalVotes, 2);
+            } else {
                 $foodList[$key]['percent'] = 0;
+            }
+            $foodList[$key]['img_url'] = URL::to('/') .'/'. $foodList[$key]['img_url'];
         }
-        $totalVote = $VoteList[4]->item_count;
         return $foodList;
     }
 
