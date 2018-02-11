@@ -87,5 +87,3 @@
         </div>
     </div>
 @endsection
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="//www.google.com/jsapi"></script>
