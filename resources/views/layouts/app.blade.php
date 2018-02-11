@@ -97,6 +97,7 @@
     </script>
     @guest
     @else
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script src="{{ asset('js/app.js') }}"></script>
     @endguest
 </body>
