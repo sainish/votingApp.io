@@ -1,20 +1,22 @@
 @extends('layouts.app')
-@section('content')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
 
-<div id="app">
-    <!--    <example-component>
-        </example-component>-->
+@section('content')
     <div class="container" >
         <div class="row justify-content-center">
-
             <div class="col-md-8">
-
                 <div class="card card-default">
                     <div class="card-header"> 
-                        <h1><i class="fa fa-thumbs-up"></i>
-                            Food Voting</h1>
+                        <h1>
+                            <i class="fa fa-thumbs-up"></i>
+                            Food Voting
+                        </h1>
                     </div>
 
                     <div class="card-body">
@@ -26,7 +28,11 @@
 
                         <div class="col-md-12">
                             <div class="panel panel-primary">
-                                <div class="panel-body">
+                                <div v-if="loading">
+                                    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+                                </div>
+                                <div class="panel-body" v-cloak>
+                                    <h4 align="center">Total Vote Given: @{{totalVoteGivenAll}}</h4>
                                     <ul class="list-group">
                                         <li v-for="(item, index) in items" class="list-group-item">
                                             <div class="radio pointer">
@@ -38,18 +44,16 @@
                                                                v-model="selectedFood">
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                     </label>
-                                                                            <!--<input type="radio" name="optionsRadios">--> 
                                                     &nbsp; &nbsp; &nbsp;
                                                     <img  :src="item['img_url']" width="50" height="50"/>
                                                     @{{item['name']}}
-
                                                 </label>
 
                                                 <div class="progress">
                                                     <div class="progress-bar" role="progressbar" 
-                                                        v-bind:style="{width: item['percent']+'%'}"
-                                                        aria-valuemin="0" aria-valuemax="100">
-                                                        @{{item['percent']}}
+                                                         v-bind:style="{width: item['percent']+'%'}"
+                                                         aria-valuemin="0" aria-valuemax="100">
+                                                        @{{item['totalVoteGiven']}} / @{{totalVoteGivenAll}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -58,8 +62,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="row">
-
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-10"  v-cloak>
                                             <div class="alert alert-info"  
                                                  v-bind:class="{ 'alert-success': isSuccess, 'alert-danger': hasError }">
                                                 <span class="success">@{{error}}</span>
@@ -83,7 +86,6 @@
             </div>
         </div>
     </div>
-</div>
-
 @endsection
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="//www.google.com/jsapi"></script>
