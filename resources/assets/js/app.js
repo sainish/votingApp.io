@@ -13,11 +13,13 @@ var app = new Vue({
         selectedFood: false,
         isSuccess: false,
         hasError: false,
-        googleChartData: [['Fruits', 'Users'],
+        googleChartData: [['Fruits', 'Votes'],
         ],
         chart:'',
         googleChartOptions:'',
-        data:''
+        data:'',
+        loading:true,
+        totalVoteGivenAll:0
     },
     mounted() {
         
@@ -41,17 +43,20 @@ var app = new Vue({
         },
         fetchFoodList: function (event) {
             const vm = this;
+           
             axios.get(config.routes.getFoodList)
                     .then(function (response) {
                         vm.items = response.data;
                         var index;
-                        console.log(response.data)
-                        console.log(response.data.length)
-                        vm.googleChartData = [['Fruits', 'Users']];
+                        vm.totalVoteGivenAll = 0;
+                        vm.googleChartData = [['Fruits', 'Votes']];
                         for (index = 0; index < response.data.length; ++index) {
+                            vm.totalVoteGivenAll += response.data[index]['totalVoteGiven'];
                             vm.googleChartData.push([response.data[index]['name'], response.data[index]['percent']]);
                         }
-                        vm.drawChart();
+                        google.charts.setOnLoadCallback(vm.drawChart);
+                        vm.loading = false
+                        
                     })
                     .catch(function (error) {
                         // Wu oh! Something went wrong

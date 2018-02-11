@@ -1,5 +1,5 @@
 <?php
-
+//use Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,10 +11,16 @@
 |
 */
 
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+if(Auth::check()){
 Route::get('/', function () {
     return view('welcome');
-});
-
+});   }else{
+Route::get('/', 'HomeController@index');
+}
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
