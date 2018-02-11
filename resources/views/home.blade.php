@@ -29,7 +29,7 @@
                         <div class="col-md-12">
                             <div class="panel panel-primary">
                                 <div v-if="loading">
-                                    <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+                                    <h3 align="center"><i class="fa fa-spinner fa-spin" style="font-size:40px"></i></h3>
                                 </div>
                                 <div class="panel-body" v-cloak>
                                     <h4 align="center">Total Vote Given: @{{totalVoteGivenAll}}</h4>

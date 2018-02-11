@@ -72,6 +72,7 @@ var app = new Vue({
                 this_vm.error = "Please select any one option.";
                 return;
             }
+            this.loading = true
             axios.post(config.routes.giveVote, {
                 selectedFood: this_vm.selectedFood,
             }).then(function (response) {
@@ -85,6 +86,7 @@ var app = new Vue({
                     this_vm.error = "You already voted for " + response.data[0].name + ".";
                 }
                 this_vm.fetchFoodList();
+                this_vm.loading = false
             })
                 .catch(function (error) {
                     console.log(error);
